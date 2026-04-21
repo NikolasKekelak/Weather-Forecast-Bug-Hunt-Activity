@@ -21,6 +21,7 @@ public class WeatherService {
                 geo.get("name").asText(),
                 geo.get("latitude").asDouble(),
                 geo.get("longitude").asDouble()
+                // test checkout
         );
     }
 
