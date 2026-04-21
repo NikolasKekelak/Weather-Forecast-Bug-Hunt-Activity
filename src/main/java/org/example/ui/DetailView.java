@@ -21,38 +21,15 @@ public class DetailView extends JDialog {
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel iconLabel = new JLabel(ImageRegistry.getImage(weather.getState()));
-        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel tempLabel = new JLabel(String.format("%.1f°C", weather.getTemperature()));
-        tempLabel.setFont(new Font("JetBrains Mono", Font.BOLD, 48));
-        tempLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel descLabel = new JLabel(weather.getDescription());
-        descLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 24));
-        descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel windLabel = new JLabel(String.format("Wind: %.1f km/h, Direction: %.0f°", weather.getWindSpeed(), weather.getWindDirection()));
-        windLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 18));
-        windLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel timeLabel = new JLabel("Time: " + weather.getTime().replace("T", " "));
-        timeLabel.setFont(new Font("JetBrains Mono", Font.ITALIC, 16));
-        timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel dayLabel = new JLabel(weather.isDay() ? "Daytime" : "Nighttime");
-        dayLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 18));
-        dayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        content.add(iconLabel);
+        content.add(createLabel(null, ImageRegistry.getImage(weather.getState()), 0, 0));
         content.add(Box.createVerticalStrut(20));
-        content.add(tempLabel);
-        content.add(descLabel);
+        content.add(createLabel(String.format("%.1f°C", weather.getTemperature()), null, 48, Font.BOLD));
+        content.add(createLabel(weather.getDescription(), null, 24, Font.PLAIN));
         content.add(Box.createVerticalStrut(15));
-        content.add(windLabel);
-        content.add(dayLabel);
+        content.add(createLabel(String.format("Wind: %.1f km/h, Direction: %.0f°", weather.getWindSpeed(), weather.getWindDirection()), null, 18, Font.PLAIN));
+        content.add(createLabel(weather.isDay() ? "Daytime" : "Nighttime", null, 18, Font.PLAIN));
         content.add(Box.createVerticalStrut(10));
-        content.add(timeLabel);
+        content.add(createLabel("Time: " + weather.getTime().replace("T", " "), null, 16, Font.ITALIC));
 
         add(content, BorderLayout.CENTER);
 
@@ -83,6 +60,13 @@ public class DetailView extends JDialog {
 
         pack();
         setLocationRelativeTo(owner);
+    }
+
+    private JLabel createLabel(String text, Icon icon, int size, int style) {
+        JLabel label = icon != null ? new JLabel(icon) : new JLabel(text);
+        if (size > 0) label.setFont(new Font("JetBrains Mono", style, size));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return label;
     }
 
     public boolean isDeleted() {

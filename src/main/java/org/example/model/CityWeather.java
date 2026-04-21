@@ -1,19 +1,19 @@
 package org.example.model;
 
 public class CityWeather {
-    private final String       id;
-    private String             cityName;
-    private final double       latitude;
-    private final double       longitude;
-    private final double       temperature;
-    private final String       description;
-    private final WeatherState state;
-    private final double       windSpeed;
-    private final double       windDirection;
-    private final String       time;
-    private final boolean      isDay;
+    private String id;
+    private String cityName;
+    private double latitude;
+    private double longitude;
+    private double temperature;
+    private String description;
+    private WeatherState state;
+    private double windSpeed;
+    private double windDirection;
+    private String time;
+    private boolean isDay;
 
-    public CityWeather(String id, String cityName, double latitude, double longitude, double temperature, String description, WeatherState state, 
+    public CityWeather(String id, String cityName, double latitude, double longitude, double temperature, String description, WeatherState state,
                        double windSpeed, double windDirection, String time, boolean isDay) {
         this.id = id;
         this.cityName = cityName;
@@ -27,6 +27,7 @@ public class CityWeather {
         this.time = time;
         this.isDay = isDay;
     }
+
 
     public String getId() {
         return id;
@@ -44,8 +45,18 @@ public class CityWeather {
         return longitude;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void rename(CityWeather other) {
+        this.id = other.id;
+        this.cityName = other.cityName;
+        this.latitude = other.latitude;
+        this.longitude = other.longitude;
+        this.temperature = other.temperature;
+        this.description = other.description;
+        this.state = other.state;
+        this.windSpeed = other.windSpeed;
+        this.windDirection = other.windDirection;
+        this.time = other.time;
+        this.isDay = other.isDay;
     }
 
     public double getTemperature() {

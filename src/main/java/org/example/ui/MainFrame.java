@@ -62,25 +62,27 @@ public class MainFrame extends JFrame {
     private void addNewCity() {
         String name = JOptionPane.showInputDialog(this, "Enter City Name:");
         if (name != null && !name.trim().isEmpty()) {
-            new Thread(() -> {
-                try {
-                    CityWeather cw = service.fetchWeather(name);
-                    SwingUtilities.invokeLater(() -> {
-                        cities.add(cw);
-                        refreshGrid();
-                    });
-                } catch (Exception ex) {
-                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage()));
-                }
-            }).start();
+            fetchAndThen(name, cities::add);
         }
+    }
+
+    private void fetchAndThen(String cityName, java.util.function.Consumer<CityWeather> action) {
+        new Thread(() -> {
+            try {
+                CityWeather cw = service.fetchWeather(cityName);
+                SwingUtilities.invokeLater(() -> {
+                    action.accept(cw);
+                    refreshGrid();
+                });
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage()));
+            }
+        }).start();
     }
 
     private void refreshGrid() {
         gridPanel.removeAll();
-        for (CityWeather city : cities) {
-            gridPanel.add(new CityBox(city, this::showDetail));
-        }
+        cities.forEach(city -> gridPanel.add(new CityBox(city, this::showDetail)));
         gridPanel.add(new AddCityButton(this::addNewCity));
         gridPanel.revalidate();
         gridPanel.repaint();
@@ -92,10 +94,10 @@ public class MainFrame extends JFrame {
 
         if (detail.isDeleted()) {
             cities.remove(city);
+            refreshGrid();
         } else if (!detail.getNewName().equals(city.getCityName())) {
-            city.setCityName(detail.getNewName());
+            fetchAndThen(detail.getNewName(), city::rename);
         }
-        refreshGrid();
     }
 
     @Override
