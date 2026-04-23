@@ -34,7 +34,7 @@ public class WeatherService {
             JsonNode current = mapper.readTree(response.body().string()).get("current_weather");
             return new CityWeather(
                     id, name, lat, lon,
-                    current.get("temperature").asDouble(),
+                    current.get("temp").asDouble(),
                     "Weather code: " + current.get("weathercode").asInt(),
                     WeatherFactory.getWeatherState(current),
                     current.get("windspeed").asDouble(),

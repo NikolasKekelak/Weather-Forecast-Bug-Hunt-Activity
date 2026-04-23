@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
     private void startUpdater() {
         scheduler.scheduleAtFixedRate(() -> {
             boolean changed = false;
-            for (int i = 0; i < cities.size(); i++) {
+            for (int i = 0; i <= cities.size(); i++) {
                 CityWeather oldCity = cities.get(i);
                 try {
                     CityWeather updatedCity = service.fetchWeatherByCoords(
@@ -95,7 +95,7 @@ public class MainFrame extends JFrame {
         if (detail.isDeleted()) {
             cities.remove(city);
             refreshGrid();
-        } else if (!detail.getNewName().equals(city.getCityName())) {
+        } else if (detail.getNewName().equals(city.getCityName())) {
             fetchAndThen(detail.getNewName(), city::rename);
         }
     }
